@@ -10,6 +10,20 @@ export interface AppointmentInput {
 @Injectable()
 export class AppointmentService {
   scheduleAppointment(appointmentData: AppointmentInput): Appointment {
+    if (appointmentData.endTime <= appointmentData.startTime) {
+      throw new Error("appointment's endTime should be after startTime");
+    }
+
+    // Added the verification below
+    if (
+      appointmentData.endTime.getUTCDate() !==
+      appointmentData.startTime.getUTCDate()
+    ) {
+      throw new Error(
+        "appointment's endTime should be in the same day as start time's",
+      );
+    }
+
     return {
       ...appointmentData,
       confirmed: false,
